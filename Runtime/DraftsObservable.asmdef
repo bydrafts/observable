@@ -1,0 +1,22 @@
+{
+    "name": "DraftsObservable",
+    "rootNamespace": "",
+    "references": [
+        "DraftsDataView"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.drafts.dataview",
+            "expression": "",
+            "define": "DRAFTS_DATAVIEW"
+        }
+    ],
+    "noEngineReferences": false
+}

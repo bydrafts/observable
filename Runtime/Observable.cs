@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlueGravity
+namespace Drafts
 {
     public delegate void ValueChangedHandler<in T>(T value);
 

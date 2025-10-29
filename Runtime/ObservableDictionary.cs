@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 using ChangeArgs = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
 using ChangeAction = System.Collections.Specialized.NotifyCollectionChangedAction;
 
-namespace Utility
+namespace Drafts
 {
     public enum DictionaryEvent
     {

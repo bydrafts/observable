@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 
-namespace Utility
+namespace Drafts
 {
     using Action = NotifyCollectionChangedAction;
     using ChangedArgs = NotifyCollectionChangedEventArgs;
