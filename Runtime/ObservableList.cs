@@ -8,7 +8,17 @@ namespace Drafts
 {
     using Action = NotifyCollectionChangedAction;
     using ChangedArgs = NotifyCollectionChangedEventArgs;
-
+   
+    public enum ListEvent
+    {
+        Change,
+        Add,
+        Remove,
+        Clear,
+    }
+    
+    public delegate void ListEventHandler<TValue>(ListEvent action, int index, TValue value);
+    
     public interface IObservableList<out T> : IReadOnlyList<T>, INotifyCollectionChanged { }
 
     /// <summary>
@@ -19,9 +29,21 @@ namespace Drafts
     {
         [SerializeField] private List<T> list;
 
+        public event ListEventHandler<T> OnChanged;
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public T this[int index] { get => list[index]; set => list[index] = value; }
+        public T this[int index]
+        {
+            get => list[index];
+            set
+            {
+                var old = list[index];
+                list[index] = value;
+                var args = new ChangedArgs(Action.Replace, item, old, index);
+                CollectionChanged?.Invoke(this, args);
+                OnChanged?.Invoke(ListEvent.Change, index, item);
+            } 
+        }
 
         public int Count => list.Count;
         public bool IsReadOnly => ((IList<T>)list).IsReadOnly;
@@ -48,6 +70,7 @@ namespace Drafts
             list.Insert(index, item);
             var args = new ChangedArgs(Action.Add, item, index);
             CollectionChanged?.Invoke(this, args);
+            OnChanged?.Invoke(ListEvent.Add, index, item);
         }
 
         public void Clear()
@@ -55,6 +78,7 @@ namespace Drafts
             list.Clear();
             var args = new ChangedArgs(Action.Reset);
             CollectionChanged?.Invoke(this, args);
+            OnChanged?.Invoke(ListEvent.Clear, 0, default);
         }
 
         public bool Remove(T item)
@@ -71,10 +95,12 @@ namespace Drafts
             list.RemoveAt(index);
             var args = new ChangedArgs(Action.Remove, item, index);
             CollectionChanged?.Invoke(this, args);
+            OnChanged?.Invoke(ListEvent.Remove, index, item);
         }
 
         public void RemoveAll(Func<T, bool> predicate)
         {
+            OnChanged.
             for (var i = list.Count - 1; i >= 0; i--)
                 if (predicate(list[i]))
                     RemoveAt(i);
