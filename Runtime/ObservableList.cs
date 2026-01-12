@@ -100,7 +100,6 @@ namespace Drafts
 
         public void RemoveAll(Func<T, bool> predicate)
         {
-            OnChanged.
             for (var i = list.Count - 1; i >= 0; i--)
                 if (predicate(list[i]))
                     RemoveAt(i);
