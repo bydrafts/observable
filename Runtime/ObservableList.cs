@@ -39,9 +39,9 @@ namespace Drafts
             {
                 var old = list[index];
                 list[index] = value;
-                var args = new ChangedArgs(Action.Replace, item, old, index);
+                var args = new ChangedArgs(Action.Replace, value, old, index);
                 CollectionChanged?.Invoke(this, args);
-                OnChanged?.Invoke(ListEvent.Change, index, item);
+                OnChanged?.Invoke(ListEvent.Change, index, value);
             } 
         }
 
