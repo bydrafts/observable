@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Drafts.DataView
 {
-    public class ObservableView : DataView.DataView<IReadOnlyObservable>
+    public class ObservableView : DataView<IReadOnlyObservable>
     {
-        [SerializeField] private DataView.DataView dataView;
+        [SerializeField] private DataView dataView;
 
         protected override void Subscribe()
         {
