@@ -8,7 +8,7 @@ namespace Drafts
 {
     using Action = NotifyCollectionChangedAction;
     using ChangedArgs = NotifyCollectionChangedEventArgs;
-   
+
     public enum ListEvent
     {
         Change,
@@ -16,16 +16,16 @@ namespace Drafts
         Remove,
         Clear,
     }
-    
+
     public delegate void ListEventHandler<TValue>(ListEvent action, int index, TValue value);
-    
+
     public interface IObservableList<out T> : IReadOnlyList<T>, INotifyCollectionChanged { }
 
     /// <summary>
     /// Made this cause ObservableCollection inst serializable
     /// </summary>
     [Serializable]
-    public class ObservableList<T> : IList<T>, IObservableList<T>
+    public class ObservableList<T> : IList<T>, IObservableList<T>, IList
     {
         [SerializeField] private List<T> list;
 
@@ -35,18 +35,16 @@ namespace Drafts
         public T this[int index]
         {
             get => list[index];
-            set
-            {
+            set {
                 var old = list[index];
                 list[index] = value;
                 var args = new ChangedArgs(Action.Replace, value, old, index);
                 CollectionChanged?.Invoke(this, args);
                 OnChanged?.Invoke(ListEvent.Change, index, value);
-            } 
+            }
         }
 
         public int Count => list.Count;
-        public bool IsReadOnly => ((IList<T>)list).IsReadOnly;
 
         public bool Contains(T item) => list.Contains(item);
         public int IndexOf(T item) => list.IndexOf(item);
@@ -104,5 +102,17 @@ namespace Drafts
                 if (predicate(list[i]))
                     RemoveAt(i);
         }
+
+        public bool IsReadOnly => ((IList<T>)list).IsReadOnly;
+        void ICollection.CopyTo(Array array, int index) => ((ICollection)list).CopyTo(array, index);
+        bool ICollection.IsSynchronized => ((ICollection)list).IsSynchronized;
+        object ICollection.SyncRoot => ((ICollection)list).SyncRoot;
+        object IList.this[int index] { get => ((IList)list)[index]; set => ((IList)list)[index] = value; }
+        int IList.Add(object value) => ((IList)list).Add(value);
+        bool IList.Contains(object value) => ((IList)list).Contains(value);
+        int IList.IndexOf(object value) => ((IList)list).IndexOf(value);
+        void IList.Insert(int index, object value) => ((IList)list).Insert(index, value);
+        void IList.Remove(object value) => ((IList)list).Remove(value);
+        bool IList.IsFixedSize => ((IList)list).IsFixedSize;
     }
 }
